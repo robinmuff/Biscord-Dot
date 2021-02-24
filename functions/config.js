@@ -1,11 +1,11 @@
-var configpath = "config/config.json";
+let configpath = "config/config.json";
 const fs = require('fs')
 
 function getConfig(key) {
     let keys = key.split("/");
-    var config = readconfig();
+    let config = readconfig();
 
-    var val;
+    let val;
     for (let i = 0; i < keys.length; i++) {
         if (i == 0) {
         val = config[keys[i]];
@@ -20,15 +20,9 @@ exports.getConfig = getConfig;
 
 function setConfig(key, value) {
     let keys = key.split("/");
-    var config = readconfig();
+    let config = readconfig();
 
-    let val = "config";
-    for (let i = 0; i < keys.length; i++) {
-        val += ('["' + keys[i] + '"]');
-    }
-    val += ' = "' + value + '"';
-
-    eval(val)
+    eval(createconfigstring(keys, value));
 
     writeconfig(config);
 }
@@ -40,4 +34,12 @@ function readconfig() {
 }
 function writeconfig(config) {
     fs.writeFileSync(configpath, JSON.stringify(config), 'utf-8');
+}
+function createconfigstring(keys, value) {
+    let searchquerry = "";
+    for (let i = 0; i < keys.length; i++) {
+        searchquerry += ('["' + keys[i] + '"]');
+    }
+
+    return "config" + searchquerry + ' = "' + value + '"';
 }
