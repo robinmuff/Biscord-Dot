@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/robinmuff/Biscord-Dot#readme",
   "dependencies": {
-    "discord.js": "^12.5.1"
+    "discord.js": "^12.5.1",
+    "encrypt-with-password": "^1.0.0"
   }
 }
