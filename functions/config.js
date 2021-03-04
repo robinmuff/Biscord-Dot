@@ -1,7 +1,8 @@
 let configpath = "config/config.json";
 const fs = require('fs')
+const encryptpwd = require('encrypt-with-password');
 
-function getConfig(key) {
+function getConfig(key, isEncrypted = false, password = "") {
     let keys = key.split("/");
     let config = readconfig();
 
@@ -14,20 +15,27 @@ function getConfig(key) {
         }
     }
 
+    if (isEncrypted) {
+        return encryptpwd.decrypt(val, password);
+    }
+
     return val;
 }
 exports.getConfig = getConfig;
 
-function setConfig(key, value) {
+function setConfig(key, value, isEncrypted = false, password = "") {
     let keys = key.split("/");
     let config = readconfig();
+
+    if (isEncrypted) {
+        value = encryptpwd.encrypt(value, password);
+    }
 
     eval(createconfigstring(keys, value));
 
     writeconfig(config);
 }
 exports.setConfig = setConfig;
-
 
 function readconfig() {
     return JSON.parse(fs.readFileSync(configpath, 'utf-8'));
