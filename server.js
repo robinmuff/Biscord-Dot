@@ -2,9 +2,25 @@ const config = require("./functions/config");
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-/*
-config.setConfig("TOKEN", "ODE1MjQ0NTEzMTc4MDI2MDE1.YDplng.xtIw7HZ52rlKgjWOT8UfaNfRaBk", true, "MyKey")
-*/
+let TOKEN = "";
+const rl = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
+const readkey = prompt => {
+    return new Promise((resolve, reject) => {
+      rl.question(prompt, resolve)
+    })
+}
 
-bot.login(config.getConfig("TOKEN", true, "MyKey"));
 
+(async () => {
+    TOKEN = await readkey(`PW(to set new: "setnew"): `);
+
+    if (TOKEN === "setnew") {
+        TOKEN = await readkey(`NEW PW: `);
+        config.setConfig("TOKEN", "yourtoken", true, TOKEN)
+    }
+    
+    bot.login(config.getConfig("TOKEN", true, TOKEN));
+})()
